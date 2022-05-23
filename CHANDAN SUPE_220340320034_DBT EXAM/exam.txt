@@ -1,0 +1,111 @@
+Write SELECT statements to achieve the following:-
+3.	Display all the employees where SAL between 2500 and 5000 (inclusive of both).
+
+ans---select * from emp where sal between 2500 and 5000;
+7839	KING	MANAGER	1991-11-17	5000.00		10
+7698	BLAKE	CLERK	1981-05-01	2850.00		30
+7566	JONES	CLERK	1981-04-02	2975.00		20
+
+-- 4.	Display all the ENAMEs in descending order of ENAME
+
+ans-- select ename from emp order by ename desc;
+MARTIN
+KING
+JONES
+CLARK
+BLAKE
+ALLEN
+
+-- 5.	Display all the JOBs in lowercase
+ans--- select lower(job) from emp;
+manager
+clerk
+manager
+clerk
+salesman
+salesman
+
+-- 6.	Display the ENAMEs and the lengths of the ENAMEs.
+ans --- select ename,length(ename) from emp;
+KING	4
+BLAKE	5
+CLARK	5
+JONES	5
+MARTIN	6
+ALLEN	5
+
+- 7.	Display the DEPTNO and the count of employees who belong to that DEPTNO 
+select deptno,count(*) from emp
+group by deptno;
+
+10	2
+30	3
+20	1
+
+
+-- 8.	Display the DNAMEs and the ENAMEs who belong to that DNAME
+ans --select dname,ename from emp,dept
+where emp.deptno = dept.deptno
+order by 1;
+
+ACCOUNTING	KING
+ACCOUNTING	CLARK
+RESEARCH	JONES
+SALES	BLAKE
+SALES	MARTIN
+SALES	ALLEN
+
+-- 9.	Display the position at which the string ‘AR’ occurs in the ename
+ans-- select instr(ename,'AR') from emp;
+0
+0
+3
+0
+2
+0
+
+-- 10.	Display the HRA for each employee given that HRA is 20% of SAL.
+ans--select *,sal*0.2 as "HRA" from emp;
+
+7839	KING	MANAGER	1991-11-17	5000.00		10	1000.00
+7698	BLAKE	CLERK	1981-05-01	2850.00		30	570.00
+7782	CLARK	MANAGER	1981-06-09	2450.00		10	490.00
+7566	JONES	CLERK	1981-04-02	2975.00		20	595.00
+7654	MARTIN	SALESMAN	1981-09-28	1250.00	1400.00	30	250.00
+7499	ALLEN	SALESMAN	1981-02-20	1600.00	300.00	30	320.00
+
+
+------------------------Section II--------------
+1.	Write a stored procedure by the name of PROC1 that accepts two 
+varchar strings as parameters. Your procedure should then determine i
+f the first varchar string exists inside the varchar string. For example, if
+ string1 = ‘DAC’ and string2 = ‘CDAC, then string1 exists inside string2.
+ The stored procedure should insert the appropriate message into a suitable TEMPP output table.
+ Calling program for the stored procedure need not be written
+ 
+ 
+ ans===
+create procedure PROC1(str1 varchar(50),str2 varchar(50))
+begin
+declare msg varchar(50);
+declare num int;
+select LOCATE(str1,str2) into num;
+if num>0 then
+insert into tempp values(str1,str2,'str1 exists in str2');
+else
+insert into tempp values(str1,str2,'str 1 does not exists in str2');
+end if;
+select * from tempp;
+end; //
+delimiter;
+
+
+
+2.	Create a stored function by the name of FUNC1 to take three parameters, the sides of a triangle. The function should return a Boolean value:- TRUE if the triangle is valid, FALSE otherwise. A triangle is valid if the length of each side is less than the sum of the lengths of the other two sides. Check if the dimensions entered can form a valid triangle. Calling program for the stored function need not be written.
+
+delimiter //
+create function FUNC(x int ,y int,z int)
+returns boolean
+deterministic
+begin
+if (x < y+z) or (y < x+z) or (z < x+y) then
